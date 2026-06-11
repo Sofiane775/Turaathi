@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="تُرَاثِي">
+<title>تُرَاثِي — Turaathi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #f5f0e8;
+  --bg2:       #ede7d9;
+  --bg3:       #e4dccb;
+  --card:      #faf7f2;
+  --green:     #2d5a3d;
+  --green2:    #3d7a54;
+  --green3:    #4e9668;
+  --green-lt:  #d4ead9;
+  --green-xlt: #eaf4ec;
+  --gold:      #b5872a;
+  --gold-lt:   #f5e9c8;
+  --cream:     #f5f0e8;
+  --text:      #1a2e22;
+  --text2:     #3d5245;
+  --text3:     #6b8c75;
+  --text4:     #9ab5a0;
+  --border:    rgba(45,90,61,.12);
+  --border2:   rgba(45,90,61,.22);
+  --shadow:    0 2px 16px rgba(45,90,61,.10);
+  --warn:      #c47c1a;
+  --warn-lt:   #fef3e2;
+  --info:      #1a5a8c;
+  --info-lt:   #e2f0fe;
+  --danger:    #9c2a2a;
+  --safe:      var(--green);
+  --safe-lt:   var(--green-xlt);
+  --radius:    14px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --tab-h:     64px;
+  --safe-bot:  env(safe-area-inset-bottom, 0px);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; overflow:hidden; background:var(--bg); }
+
+body {
+  font-family:'Inter', sans-serif;
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  max-width:430px;
+  margin:0 auto;
+  position:relative;
+}
+
+/* ===== SCROLLABLE MAIN ===== */
+#app-main {
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:calc(var(--tab-h) + var(--safe-bot) + 8px);
+}
+
+/* ===== TAB BAR ===== */
+#tab-bar {
+  position:fixed;
+  bottom:0; left:50%;
+  transform:translateX(-50%);
+  width:100%;max-width:430px;
+  height:calc(var(--tab-h) + var(--safe-bot));
+  background:var(--card);
+  border-top:1px solid var(--border);
+  display:flex;
+  z-index:100;
+  padding-bottom:var(--safe-bot);
+}
+.tab {
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;
+  padding:8px 4px 6px;
+  color:var(--text4);
+  transition:color .2s;
+  position:relative;
+}
+.tab.active { color:var(--green); }
+.tab svg { width:22px;height:22px;stroke-width:1.8; }
+.tab-label { font-size:10px;font-weight:500;letter-spacing:.02em; }
+.tab-dot {
+  position:absolute;top:6px;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--gold);display:none;
+}
+
+/* ===== PAGES ===== */
+.page { display:none; padding:0; }
+.page.active { display:block; }
+
+/* ===== TOP BAR ===== */
+.topbar {
+  position:sticky;top:0;z-index:50;
+  background:var(--bg);
+  padding:52px 18px 12px;
+  border-bottom:1px solid var(--border);
+}
+.topbar-title {
+  font-family:'Amiri',serif;
+  font-size:22px;font-weight:700;
+  color:var(--text);
+}
+.topbar-sub {
+  font-size:12px;color:var(--text3);
+  margin-top:1px;
+}
+
+/* ===== COMPONENTS ===== */
+.section { padding:16px 16px 0; }
+.section:last-child { padding-bottom:8px; }
+
+.card {
+  background:var(--card);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  padding:16px;
+  margin-bottom:10px;
+  box-shadow:var(--shadow);
+}
+.card-sm {
+  background:var(--card);
+  border-radius:var(--radius-sm);
+  border:1px solid var(--border);
+  padding:12px 14px;
+  margin-bottom:8px;
+}
+
+.row { display:flex;align-items:center;gap:10px; }
+.row-between { display:flex;align-items:center;justify-content:space-between; }
+
+.lbl { font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px; }
+.lbl-ar { font-family:'Amiri',serif;font-size:13px;color:var(--text2);direction:rtl; }
+
+.ar-text {
+  font-family:'Amiri',serif;
+  direction:rtl;text-align:right;
+  color:var(--text);line-height:2;
+}
+
+.tag {
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:500;
+  padding:3px 10px;border-radius:20px;
+}
+.tag-green { background:var(--green-xlt);color:var(--green); }
+.tag-gold  { background:var(--gold-lt);color:var(--gold); }
+.tag-warn  { background:var(--warn-lt);color:var(--warn); }
+.tag-info  { background:var(--info-lt);color:var(--info); }
+.tag-gray  { background:var(--bg3);color:var(--text3); }
+
+/* stat cards */
+.stats-row { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px; }
+.stat-card {
+  background:var(--card);border-radius:var(--radius-sm);
+  border:1px solid var(--border);padding:14px 12px;
+  text-align:center;
+}
+.stat-n { font-size:26px;font-weight:600;color:var(--green);line-height:1; }
+.stat-l { font-size:11px;color:var(--text3);margin-top:4px; }
+
+/* progress bar */
+.prog-wrap {
+  background:var(--bg3);border-radius:20px;
+  height:8px;overflow:hidden;margin:6px 0;
+}
+.prog-fill {
+  height:100%;border-radius:20px;
+  background:var(--green2);
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+}
+
+/* buttons */
+.btn {
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:500;
+  padding:12px 18px;border-radius:var(--radius-sm);
+  border:1px solid var(--border2);
+  background:var(--card);color:var(--text);
+  cursor:pointer;transition:all .18s;
+  -webkit-appearance:none;
+}
+.btn:active { transform:scale(.97); }
+.btn-full { width:100%; }
+.btn-primary {
+  background:var(--green);color:#fff;
+  border-color:var(--green);
+}
+.btn-primary:active { background:var(--green2); }
+.btn-sm { font-size:12px;padding:8px 14px; }
+.btn-icon-sq {
+  width:36px;height:36px;padding:0;
+  border-radius:var(--radius-xs);
+  background:var(--bg2);border:1px solid var(--border);
+  display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text3);transition:all .18s;
+  flex-shrink:0;
+}
+.btn-icon-sq:active { transform:scale(.93); }
+.btn-icon-sq.active-check { background:var(--green-xlt);color:var(--green);border-color:var(--green2); }
+.btn-icon-sq.active-prog  { background:var(--warn-lt);color:var(--warn);border-color:var(--warn); }
+.btn-icon-sq.active-bm    { background:var(--info-lt);color:var(--info);border-color:var(--info); }
+
+/* form */
+.form-group { margin-bottom:14px; }
+.form-label { font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;display:block; }
+input,select,textarea {
+  width:100%;font-family:'Inter',sans-serif;
+  font-size:14px;color:var(--text);
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:var(--radius-xs);
+  padding:11px 13px;
+  -webkit-appearance:none;
+  outline:none;
+  transition:border-color .2s;
+}
+input:focus,select:focus,textarea:focus {
+  border-color:var(--green2);
+  background:var(--card);
+}
+textarea { resize:none;line-height:1.6; }
+textarea.ar-input {
+  font-family:'Amiri',serif;font-size:18px;
+  direction:rtl;text-align:right;min-height:90px;
+}
+.form-actions { display:flex;gap:10px;margin-top:6px; }
+.btn-cancel { flex:0;background:var(--bg2);color:var(--text3);border:1px solid var(--border); }
+
+/* divider */
+.divider { height:1px;background:var(--border);margin:12px 0; }
+
+/* empty state */
+.empty {
+  text-align:center;padding:40px 20px;
+  color:var(--text4);
+}
+.empty-icon {
+  width:56px;height:56px;border-radius:50%;
+  background:var(--bg2);margin:0 auto 12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.empty-icon svg { width:26px;height:26px;stroke:var(--text4);stroke-width:1.5; }
+.empty p { font-size:13px;line-height:1.6; }
+
+/* list items */
+.list-item {
+  background:var(--card);border-radius:var(--radius-sm);
+  border:1px solid var(--border);
+  padding:13px 14px;margin-bottom:8px;
+  transition:border-color .2s;
+}
+.list-item.status-learned { border-left:3px solid var(--green2);border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+.list-item.status-prog    { border-left:3px solid var(--warn);border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+.list-item.status-bm      { border-left:3px solid var(--info);border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+
+/* hadith card */
+.hadith-card {
+  background:var(--card);border-radius:var(--radius);
+  border:1px solid var(--border);
+  padding:16px;margin-bottom:10px;
+  box-shadow:var(--shadow);
+}
+.hadith-ar {
+  font-family:'Amiri',serif;font-size:18px;
+  direction:rtl;text-align:right;
+  line-height:2;color:var(--text);
+  padding-bottom:12px;margin-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.hadith-fr {
+  font-size:13px;color:var(--text2);
+  font-style:italic;line-height:1.7;
+  margin-bottom:10px;
+}
+.hadith-meta { display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:6px; }
+.hadith-ref { font-size:11px;color:var(--text3); }
+.hadith-narrator { font-size:11px;color:var(--text4); }
+
+/* search */
+.search-wrap {
+  display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:10px 13px;
+  margin-bottom:12px;
+}
+.search-wrap svg { width:18px;height:18px;stroke:var(--text4);stroke-width:2;flex-shrink:0; }
+.search-wrap input {
+  border:none;background:none;padding:0;font-size:14px;
+  flex:1;color:var(--text);
+}
+
+/* chips */
+.chips { display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px; }
+.chip {
+  font-size:12px;font-weight:500;
+  padding:6px 13px;border-radius:20px;
+  border:1px solid var(--border2);
+  background:var(--card);color:var(--text3);
+  cursor:pointer;transition:all .18s;
+  white-space:nowrap;
+}
+.chip.active { background:var(--green);color:#fff;border-color:var(--green); }
+
+/* source card */
+.source-card {
+  background:var(--card);border-radius:var(--radius);
+  border:1px solid var(--border);padding:14px;
+  margin-bottom:10px;display:flex;gap:12px;
+  align-items:flex-start;
+}
+.source-num {
+  width:42px;height:42px;border-radius:var(--radius-sm);
+  background:var(--green-xlt);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Amiri',serif;font-size:18px;color:var(--green);
+}
+.source-name-ar { font-family:'Amiri',serif;font-size:16px;color:var(--text);direction:rtl;margin-bottom:1px; }
+.source-name { font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px; }
+.source-author { font-size:11px;color:var(--text3);margin-bottom:6px; }
+.source-desc { font-size:12px;color:var(--text2);line-height:1.6;font-style:italic; }
+
+/* modal */
+.modal-backdrop {
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:200;
+  display:flex;align-items:flex-end;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;
+}
+.modal-backdrop.open { opacity:1;pointer-events:all; }
+.modal-sheet {
+  background:var(--card);
+  border-radius:var(--radius) var(--radius) 0 0;
+  width:100%;max-width:430px;margin:0 auto;
+  padding:0 0 calc(20px + var(--safe-bot));
+  transform:translateY(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  max-height:88vh;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.modal-backdrop.open .modal-sheet { transform:translateY(0); }
+.modal-handle {
+  width:40px;height:4px;border-radius:2px;
+  background:var(--bg3);margin:12px auto 16px;
+}
+.modal-title {
+  font-family:'Amiri',serif;font-size:20px;
+  text-align:center;color:var(--text);
+  padding:0 20px 4px;
+}
+.modal-meta { text-align:center;font-size:12px;color:var(--text3);padding:0 20px 16px; }
+.modal-body { padding:0 16px; }
+.modal-action-btn {
+  display:flex;align-items:center;gap:12px;
+  width:100%;padding:14px 16px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);margin-bottom:8px;
+  font-size:14px;font-weight:500;color:var(--text);
+  cursor:pointer;transition:all .18s;
+  -webkit-appearance:none;
+}
+.modal-action-btn:active { transform:scale(.98); }
+.modal-action-btn svg { width:20px;height:20px;stroke-width:2;flex-shrink:0; }
+.modal-action-btn.a-check { color:var(--green);border-color:var(--green2);background:var(--green-xlt); }
+.modal-action-btn.a-prog  { color:var(--warn);border-color:var(--warn);background:var(--warn-lt); }
+.modal-action-btn.a-bm    { color:var(--info);border-color:var(--info);background:var(--info-lt); }
+
+/* accueil hero */
+.hero-bismillah {
+  font-family:'Amiri',serif;font-size:22px;
+  color:var(--green);direction:rtl;
+  text-align:center;line-height:1.8;
+  padding:24px 20px 0;
+}
+.hero-sub { font-size:12px;color:var(--text3);text-align:center;padding-bottom:16px; }
+
+/* session card */
+.session-item {
+  background:var(--card);border-radius:var(--radius-sm);
+  border:1px solid var(--border);padding:12px 14px;
+  margin-bottom:8px;
+}
+.session-top { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px; }
+.session-sourate { font-size:13px;font-weight:600;color:var(--text); }
+.session-ar { font-family:'Amiri',serif;font-size:16px;color:var(--text2); }
+.session-date { font-size:11px;color:var(--text4); }
+.session-note { font-size:12px;color:var(--text3);font-style:italic;line-height:1.6;margin-top:5px; }
+
+/* toast */
+.toast {
+  position:fixed;bottom:calc(var(--tab-h) + var(--safe-bot) + 12px);
+  left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--text);color:#fff;
+  font-size:13px;font-weight:500;
+  padding:10px 20px;border-radius:20px;
+  opacity:0;transition:all .25s;
+  pointer-events:none;z-index:300;
+  white-space:nowrap;
+}
+.toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+
+/* ===== ACCUEIL specific ===== */
+.bm-card {
+  background:var(--green);
+  border-radius:var(--radius);padding:16px;
+  margin-bottom:10px;color:#fff;
+}
+.bm-label { font-size:11px;opacity:.7;font-weight:500;margin-bottom:6px; }
+.bm-ar { font-family:'Amiri',serif;font-size:20px;direction:rtl;text-align:right;line-height:1.8; }
+.bm-name { font-size:14px;font-weight:600;margin-top:4px; }
+.bm-meta { font-size:11px;opacity:.7;margin-top:2px; }
+</style>
+</head>
+<body>
+
+<div id="app-main">
+
+<!-- ============ ACCUEIL ============ -->
+<div class="page active" id="page-home">
+  <div class="hero-bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+  <div class="hero-sub">Au nom d'Allah, le Tout Miséricordieux</div>
+
+  <div class="section">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-n" id="h-cnt-sourates">0</div>
+        <div class="stat-l">Sourates apprises</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n" id="h-cnt-hadiths">0</div>
+        <div class="stat-l">Hadiths notés</div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-n" id="h-cnt-prog">0</div>
+        <div class="stat-l">En cours</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n" id="h-cnt-sess">0</div>
+        <div class="stat-l">Sessions</div>
+      </div>
+    </div>
+
+    <!-- Progression Coran -->
+    <div class="card">
+      <div class="row-between" style="margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:600;color:var(--text);">Progression Coran</span>
+        <span style="font-size:12px;color:var(--green);font-weight:600;" id="h-prog-pct">0%</span>
+      </div>
+      <div class="prog-wrap"><div class="prog-fill" id="h-prog-bar" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:5px;" id="h-prog-txt">0 / 114 sourates</div>
+    </div>
+
+    <!-- Marque-page -->
+    <div class="bm-card" id="h-bm-card" style="display:none;">
+      <div class="bm-label">📖 Marque-page actuel</div>
+      <div class="bm-ar" id="h-bm-ar"></div>
+      <div class="bm-name" id="h-bm-name"></div>
+      <div class="bm-meta" id="h-bm-meta"></div>
+    </div>
+
+    <!-- Hadith du jour -->
+    <div class="card">
+      <div class="lbl" style="margin-bottom:10px;">✦ Hadith du jour</div>
+      <div class="ar-text" style="font-size:17px;margin-bottom:8px;">إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى</div>
+      <div style="font-size:13px;color:var(--text2);font-style:italic;line-height:1.7;margin-bottom:8px;">« Les actes ne valent que par les intentions, et chaque homme n'obtient que ce qu'il a eu l'intention de faire. »</div>
+      <div class="row-between">
+        <span style="font-size:11px;color:var(--text3);">ʿUmar ibn al-Khaṭṭāb رضي الله عنه</span>
+        <span class="tag tag-green">Bukhārī n°1</span>
+      </div>
+    </div>
+
+    <!-- Derniers hadiths -->
+    <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;">Derniers ajoutés</div>
+    <div id="h-recent"></div>
+  </div>
+</div>
+
+<!-- ============ CORAN ============ -->
+<div class="page" id="page-coran">
+  <div class="topbar">
+    <div class="topbar-title">القُرآن الكَرِيم</div>
+    <div class="topbar-sub">Suivi d'apprentissage</div>
+  </div>
+
+  <div class="section">
+    <!-- Progression -->
+    <div class="card">
+      <div class="row-between" style="margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:600;">Progression globale</span>
+        <span style="font-size:13px;font-weight:600;color:var(--green);" id="c-pct">0%</span>
+      </div>
+      <div class="prog-wrap"><div class="prog-fill" id="c-bar" style="width:0%"></div></div>
+      <div style="display:flex;gap:14px;margin-top:8px;flex-wrap:wrap;">
+        <span style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--green2);display:inline-block;"></span>
+          <span id="c-done">0 apprises</span>
+        </span>
+        <span style="font-size:11px;color:var(--warn);display:flex;align-items:center;gap:4px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--warn);display:inline-block;"></span>
+          <span id="c-prog">0 en cours</span>
+        </span>
+        <span style="font-size:11px;color:var(--text4);display:flex;align-items:center;gap:4px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--bg3);display:inline-block;"></span>
+          <span id="c-rest">114 restantes</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Bouton session -->
+    <button class="btn btn-full" style="margin-bottom:12px;" onclick="openSessionSheet()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Enregistrer une session
+    </button>
+
+    <!-- Filtres -->
+    <div class="chips" id="c-chips">
+      <div class="chip active" data-cf="all" onclick="setCFilter('all')">Toutes</div>
+      <div class="chip" data-cf="learned" onclick="setCFilter('learned')">✓ Apprises</div>
+      <div class="chip" data-cf="inprogress" onclick="setCFilter('inprogress')">En cours</div>
+      <div class="chip" data-cf="bookmark" onclick="setCFilter('bookmark')">🔖 Marque-page</div>
+    </div>
+
+    <!-- Recherche -->
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-linecap="round"/></svg>
+      <input type="text" id="c-search" placeholder="Rechercher une sourate..." oninput="renderSourates()">
+    </div>
+
+    <!-- Liste sourates -->
+    <div id="sourate-list"></div>
+
+    <!-- Sessions -->
+    <div class="divider"></div>
+    <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;">Sessions récentes</div>
+    <div id="sessions-list"></div>
+  </div>
+</div>
+
+<!-- ============ HADITHS ============ -->
+<div class="page" id="page-hadiths">
+  <div class="topbar">
+    <div class="topbar-title">الحَدِيثُ الشَّرِيف</div>
+    <div class="topbar-sub">Mon carnet personnel</div>
+  </div>
+
+  <div class="section">
+    <!-- Bouton ajouter -->
+    <button class="btn btn-primary btn-full" style="margin-bottom:12px;" onclick="openHadithSheet()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Ajouter un hadith
+    </button>
+
+    <!-- Recherche -->
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-linecap="round"/></svg>
+      <input type="text" id="h-search" placeholder="Rechercher..." oninput="renderHadiths()">
+    </div>
+
+    <!-- Filtres source -->
+    <div class="chips" id="h-chips">
+      <div class="chip active" data-hf="all" onclick="setHFilter('all')">Tous</div>
+    </div>
+
+    <div id="hadith-list"></div>
+  </div>
+</div>
+
+<!-- ============ SOURCES ============ -->
+<div class="page" id="page-sources">
+  <div class="topbar">
+    <div class="topbar-title">المَصَادِر</div>
+    <div class="topbar-sub">Les recueils canoniques</div>
+  </div>
+  <div class="section" id="sources-list"></div>
+</div>
+
+</div><!-- end app-main -->
+
+<!-- ============ TAB BAR ============ -->
+<div id="tab-bar">
+  <div class="tab active" id="tab-home" onclick="goTab('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span class="tab-label">Accueil</span>
+  </div>
+  <div class="tab" id="tab-coran" onclick="goTab('coran')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <span class="tab-label">Coran</span>
+  </div>
+  <div class="tab" id="tab-hadiths" onclick="goTab('hadiths')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    <span class="tab-label">Hadiths</span>
+  </div>
+  <div class="tab" id="tab-sources" onclick="goTab('sources')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <span class="tab-label">Sources</span>
+  </div>
+</div>
+
+<!-- ============ MODAL SOURATE ============ -->
+<div class="modal-backdrop" id="modal-sourate" onclick="closeSheet('modal-sourate')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="ms-ar"></div>
+    <div style="font-size:18px;font-weight:600;text-align:center;padding:4px 20px 2px;color:var(--text);" id="ms-name"></div>
+    <div class="modal-meta" id="ms-meta"></div>
+    <div class="modal-body">
+      <button class="modal-action-btn" id="ms-btn-check" onclick="modalSourateAction('learned')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg>
+        Marquer comme apprise
+      </button>
+      <button class="modal-action-btn" id="ms-btn-prog" onclick="modalSourateAction('inprogress')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.5-8.33"/></svg>
+        En cours d'apprentissage
+      </button>
+      <button class="modal-action-btn" id="ms-btn-bm" onclick="modalSourateAction('bookmark')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Mettre le marque-page ici
+      </button>
+      <div class="divider"></div>
+      <div class="form-group">
+        <div class="form-label">Note personnelle</div>
+        <textarea id="ms-note" rows="3" placeholder="Tajwid, difficultés, mémorisation..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-cancel" onclick="closeSheet('modal-sourate')" style="flex:1;">Fermer</button>
+        <button class="btn btn-primary" style="flex:2;" onclick="saveSourateNote()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL HADITH ============ -->
+<div class="modal-backdrop" id="modal-hadith" onclick="closeSheet('modal-hadith')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div style="font-size:16px;font-weight:600;text-align:center;padding:0 20px 16px;color:var(--text);" id="mh-title">Nouveau hadith</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="form-label">Texte arabe <span style="color:var(--text4);font-weight:400;">(facultatif)</span></div>
+        <textarea class="ar-input" id="mh-ar" placeholder="أدخل النص العربي..."></textarea>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Traduction / signification</div>
+        <textarea id="mh-fr" rows="3" placeholder="Traduction ou signification du hadith..."></textarea>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Source</div>
+        <select id="mh-source">
+          <option value="">— Sélectionner une source —</option>
+          <option>Ṣaḥīḥ al-Bukhārī</option>
+          <option>Ṣaḥīḥ Muslim</option>
+          <option>Sunan Abī Dāwūd</option>
+          <option>Jāmiʿ al-Tirmidhī</option>
+          <option>Sunan al-Nasāʾī</option>
+          <option>Sunan Ibn Mājah</option>
+          <option>Muwaṭṭaʾ Mālik</option>
+          <option>Musnad Aḥmad</option>
+          <option>Autre source</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Référence précise</div>
+        <input type="text" id="mh-ref" placeholder="ex: n°1, Livre de la prière...">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Thème</div>
+        <select id="mh-theme">
+          <option value="">— Thème (facultatif) —</option>
+          <option>Intention (niyyah)</option>
+          <option>Prière (salāt)</option>
+          <option>Foi (īmān)</option>
+          <option>Bonnes mœurs</option>
+          <option>Piété (taqwā)</option>
+          <option>Coran & Sunnah</option>
+          <option>Licite & illicite</option>
+          <option>Akhira (au-delà)</option>
+          <option>Connaissance</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Narrateur / compagnon</div>
+        <input type="text" id="mh-narrator" placeholder="ex: Abū Hurayra رضي الله عنه">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-cancel" onclick="closeSheet('modal-hadith')" style="flex:1;">Annuler</button>
+        <button class="btn btn-primary" style="flex:2;" onclick="saveHadith()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL SESSION ============ -->
+<div class="modal-backdrop" id="modal-session" onclick="closeSheet('modal-session')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div style="font-size:16px;font-weight:600;text-align:center;padding:0 20px 16px;color:var(--text);">Nouvelle session</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="form-label">Date</div>
+        <input type="date" id="sess-date">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Sourate étudiée</div>
+        <select id="sess-sourate"></select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Versets (ex: 1–7)</div>
+        <input type="text" id="sess-versets" placeholder="ex: 1–7, ou entière">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Notes</div>
+        <textarea id="sess-note" rows="3" placeholder="Ce que j'ai retenu, difficultés, tajwid..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-cancel" onclick="closeSheet('modal-session')" style="flex:1;">Annuler</button>
+        <button class="btn btn-primary" style="flex:2;" onclick="saveSession()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const SOURATES=[{n:1,ar:'الفَاتِحَة',fr:'Al-Fatiha',v:7,t:'Mecquoise'},{n:2,ar:'البَقَرَة',fr:'Al-Baqara',v:286,t:'Médinoise'},{n:3,ar:'آلِ عِمْرَان',fr:'Āl ʿImrān',v:200,t:'Médinoise'},{n:4,ar:'النِّسَاء',fr:'Al-Nisāʾ',v:176,t:'Médinoise'},{n:5,ar:'المَائِدَة',fr:"Al-Māʾida",v:120,t:'Médinoise'},{n:6,ar:'الأَنْعَام',fr:"Al-Anʿām",v:165,t:'Mecquoise'},{n:7,ar:'الأَعْرَاف',fr:"Al-Aʿrāf",v:206,t:'Mecquoise'},{n:8,ar:'الأَنفَال',fr:'Al-Anfāl',v:75,t:'Médinoise'},{n:9,ar:'التَّوبَة',fr:'Al-Tawba',v:129,t:'Médinoise'},{n:10,ar:'يُونُس',fr:'Yūnus',v:109,t:'Mecquoise'},{n:11,ar:'هُود',fr:'Hūd',v:123,t:'Mecquoise'},{n:12,ar:'يُوسُف',fr:'Yūsuf',v:111,t:'Mecquoise'},{n:13,ar:'الرَّعْد',fr:"Al-Raʿd",v:43,t:'Médinoise'},{n:14,ar:'إِبرَاهِيم',fr:'Ibrāhīm',v:52,t:'Mecquoise'},{n:15,ar:'الحِجر',fr:'Al-Ḥijr',v:99,t:'Mecquoise'},{n:16,ar:'النَّحل',fr:'Al-Naḥl',v:128,t:'Mecquoise'},{n:17,ar:'الإِسرَاء',fr:"Al-Isrāʾ",v:111,t:'Mecquoise'},{n:18,ar:'الكَهف',fr:'Al-Kahf',v:110,t:'Mecquoise'},{n:19,ar:'مَريَم',fr:'Maryam',v:98,t:'Mecquoise'},{n:20,ar:'طه',fr:'Ṭāhā',v:135,t:'Mecquoise'},{n:21,ar:'الأَنبِيَاء',fr:"Al-Anbiyāʾ",v:112,t:'Mecquoise'},{n:22,ar:'الحَج',fr:'Al-Ḥajj',v:78,t:'Médinoise'},{n:23,ar:'المُؤمِنُون',fr:"Al-Muʾminūn",v:118,t:'Mecquoise'},{n:24,ar:'النُّور',fr:'Al-Nūr',v:64,t:'Médinoise'},{n:25,ar:'الفُرقَان',fr:'Al-Furqān',v:77,t:'Mecquoise'},{n:26,ar:'الشُّعَرَاء',fr:"Al-Shuʿarāʾ",v:227,t:'Mecquoise'},{n:27,ar:'النَّمل',fr:'Al-Naml',v:93,t:'Mecquoise'},{n:28,ar:'القَصَص',fr:'Al-Qaṣaṣ',v:88,t:'Mecquoise'},{n:29,ar:'العَنكَبُوت',fr:"Al-ʿAnkabūt",v:69,t:'Mecquoise'},{n:30,ar:'الرُّوم',fr:'Al-Rūm',v:60,t:'Mecquoise'},{n:31,ar:'لُقمَان',fr:'Luqmān',v:34,t:'Mecquoise'},{n:32,ar:'السَّجدَة',fr:'Al-Sajda',v:30,t:'Mecquoise'},{n:33,ar:'الأَحزَاب',fr:'Al-Aḥzāb',v:73,t:'Médinoise'},{n:34,ar:'سَبَأ',fr:"Sabaʾ",v:54,t:'Mecquoise'},{n:35,ar:'فَاطِر',fr:'Fāṭir',v:45,t:'Mecquoise'},{n:36,ar:'يس',fr:'Yāsīn',v:83,t:'Mecquoise'},{n:37,ar:'الصَّافَّات',fr:'Al-Ṣāffāt',v:182,t:'Mecquoise'},{n:38,ar:'ص',fr:'Ṣād',v:88,t:'Mecquoise'},{n:39,ar:'الزُّمَر',fr:'Al-Zumar',v:75,t:'Mecquoise'},{n:40,ar:'غَافِر',fr:'Ghāfir',v:85,t:'Mecquoise'},{n:41,ar:'فُصِّلَت',fr:'Fuṣṣilat',v:54,t:'Mecquoise'},{n:42,ar:'الشُّورَى',fr:"Al-Shūrā",v:53,t:'Mecquoise'},{n:43,ar:'الزُّخرُف',fr:'Al-Zukhruf',v:89,t:'Mecquoise'},{n:44,ar:'الدُّخَان',fr:"Al-Dukhān",v:59,t:'Mecquoise'},{n:45,ar:'الجَاثِيَة',fr:'Al-Jāthiya',v:37,t:'Mecquoise'},{n:46,ar:'الأَحقَاف',fr:'Al-Aḥqāf',v:35,t:'Mecquoise'},{n:47,ar:'مُحَمَّد',fr:'Muḥammad',v:38,t:'Médinoise'},{n:48,ar:'الفَتح',fr:'Al-Fatḥ',v:29,t:'Médinoise'},{n:49,ar:'الحُجُرَات',fr:'Al-Ḥujurāt',v:18,t:'Médinoise'},{n:50,ar:'ق',fr:'Qāf',v:45,t:'Mecquoise'},{n:51,ar:'الذَّارِيَات',fr:'Al-Dhāriyāt',v:60,t:'Mecquoise'},{n:52,ar:'الطُّور',fr:"Al-Ṭūr",v:49,t:'Mecquoise'},{n:53,ar:'النَّجم',fr:'Al-Najm',v:62,t:'Mecquoise'},{n:54,ar:'القَمَر',fr:'Al-Qamar',v:55,t:'Mecquoise'},{n:55,ar:'الرَّحمَن',fr:"Al-Raḥmān",v:78,t:'Médinoise'},{n:56,ar:'الوَاقِعَة',fr:"Al-Wāqiʿa",v:96,t:'Mecquoise'},{n:57,ar:'الحَدِيد',fr:'Al-Ḥadīd',v:29,t:'Médinoise'},{n:58,ar:'المُجَادَلَة',fr:'Al-Mujādala',v:22,t:'Médinoise'},{n:59,ar:'الحَشر',fr:'Al-Ḥashr',v:24,t:'Médinoise'},{n:60,ar:'المُمتَحَنَة',fr:'Al-Mumtaḥana',v:13,t:'Médinoise'},{n:61,ar:'الصَّف',fr:'Al-Ṣaff',v:14,t:'Médinoise'},{n:62,ar:'الجُمُعَة',fr:"Al-Jumuʿa",v:11,t:'Médinoise'},{n:63,ar:'المُنَافِقُون',fr:'Al-Munāfiqūn',v:11,t:'Médinoise'},{n:64,ar:'التَّغَابُن',fr:'Al-Taghābun',v:18,t:'Médinoise'},{n:65,ar:'الطَّلاق',fr:"Al-Ṭalāq",v:12,t:'Médinoise'},{n:66,ar:'التَّحرِيم',fr:"Al-Taḥrīm",v:12,t:'Médinoise'},{n:67,ar:'المُلك',fr:'Al-Mulk',v:30,t:'Mecquoise'},{n:68,ar:'القَلَم',fr:'Al-Qalam',v:52,t:'Mecquoise'},{n:69,ar:'الحَاقَّة',fr:"Al-Ḥāqqa",v:52,t:'Mecquoise'},{n:70,ar:'المَعَارِج',fr:"Al-Maʿārij",v:44,t:'Mecquoise'},{n:71,ar:'نُوح',fr:'Nūḥ',v:28,t:'Mecquoise'},{n:72,ar:'الجِن',fr:'Al-Jinn',v:28,t:'Mecquoise'},{n:73,ar:'المُزَّمِّل',fr:'Al-Muzzammil',v:20,t:'Mecquoise'},{n:74,ar:'المُدَّثِّر',fr:'Al-Muddaththir',v:56,t:'Mecquoise'},{n:75,ar:'القِيَامَة',fr:'Al-Qiyāma',v:40,t:'Mecquoise'},{n:76,ar:'الإِنسَان',fr:"Al-Insān",v:31,t:'Médinoise'},{n:77,ar:'المُرسَلَات',fr:'Al-Mursalāt',v:50,t:'Mecquoise'},{n:78,ar:'النَّبَأ',fr:"Al-Nabaʾ",v:40,t:'Mecquoise'},{n:79,ar:'النَّازِعَات',fr:"Al-Nāziʿāt",v:46,t:'Mecquoise'},{n:80,ar:'عَبَسَ',fr:"ʿAbasa",v:42,t:'Mecquoise'},{n:81,ar:'التَّكوِير',fr:'Al-Takwīr',v:29,t:'Mecquoise'},{n:82,ar:'الإِنفِطَار',fr:"Al-Infiṭār",v:19,t:'Mecquoise'},{n:83,ar:'المُطَفِّفِين',fr:"Al-Muṭaffifīn",v:36,t:'Mecquoise'},{n:84,ar:'الإِنشِقَاق',fr:"Al-Inshiqāq",v:25,t:'Mecquoise'},{n:85,ar:'البُرُوج',fr:'Al-Burūj',v:22,t:'Mecquoise'},{n:86,ar:'الطَّارِق',fr:"Al-Ṭāriq",v:17,t:'Mecquoise'},{n:87,ar:'الأَعلَى',fr:"Al-Aʿlā",v:19,t:'Mecquoise'},{n:88,ar:'الغَاشِيَة',fr:'Al-Ghāshiya',v:26,t:'Mecquoise'},{n:89,ar:'الفَجر',fr:'Al-Fajr',v:30,t:'Mecquoise'},{n:90,ar:'البَلَد',fr:'Al-Balad',v:20,t:'Mecquoise'},{n:91,ar:'الشَّمس',fr:'Al-Shams',v:15,t:'Mecquoise'},{n:92,ar:'اللَّيل',fr:'Al-Layl',v:21,t:'Mecquoise'},{n:93,ar:'الضُّحَى',fr:"Al-Ḍuḥā",v:11,t:'Mecquoise'},{n:94,ar:'الشَّرح',fr:'Al-Sharḥ',v:8,t:'Mecquoise'},{n:95,ar:'التِّين',fr:"Al-Tīn",v:8,t:'Mecquoise'},{n:96,ar:'العَلَق',fr:"Al-ʿAlaq",v:19,t:'Mecquoise'},{n:97,ar:'القَدر',fr:'Al-Qadr',v:5,t:'Mecquoise'},{n:98,ar:'البَيِّنَة',fr:'Al-Bayyina',v:8,t:'Médinoise'},{n:99,ar:'الزَّلزَلَة',fr:'Al-Zalzala',v:8,t:'Médinoise'},{n:100,ar:'العَادِيَات',fr:"Al-ʿĀdiyāt",v:11,t:'Mecquoise'},{n:101,ar:'القَارِعَة',fr:"Al-Qāriʿa",v:11,t:'Mecquoise'},{n:102,ar:'التَّكَاثُر',fr:'Al-Takāthur',v:8,t:'Mecquoise'},{n:103,ar:'العَصر',fr:"Al-ʿAṣr",v:3,t:'Mecquoise'},{n:104,ar:'الهُمَزَة',fr:'Al-Humaza',v:9,t:'Mecquoise'},{n:105,ar:'الفِيل',fr:'Al-Fīl',v:5,t:'Mecquoise'},{n:106,ar:'قُرَيش',fr:'Quraysh',v:4,t:'Mecquoise'},{n:107,ar:'المَاعُون',fr:"Al-Māʿūn",v:7,t:'Mecquoise'},{n:108,ar:'الكَوثَر',fr:'Al-Kawthar',v:3,t:'Mecquoise'},{n:109,ar:'الكَافِرُون',fr:'Al-Kāfirūn',v:6,t:'Mecquoise'},{n:110,ar:'النَّصر',fr:'Al-Naṣr',v:3,t:'Médinoise'},{n:111,ar:'المَسَد',fr:'Al-Masad',v:5,t:'Mecquoise'},{n:112,ar:'الإِخلَاص',fr:"Al-Ikhlāṣ",v:4,t:'Mecquoise'},{n:113,ar:'الفَلَق',fr:'Al-Falaq',v:5,t:'Mecquoise'},{n:114,ar:'النَّاس',fr:"Al-Nās",v:6,t:'Mecquoise'}];
+
+const SOURCES=[{r:'١',ar:'صَحِيحُ الْبُخَارِيِّ',name:'Ṣaḥīḥ al-Bukhārī',auth:'Imām al-Bukhārī (194–256 H)',desc:'Le livre le plus authentique après le Coran. Examiné 600 000 hadiths, retenu 7 563.',cnt:'~7 563 hadiths'},{r:'٢',ar:'صَحِيحُ مُسْلِمٍ',name:'Ṣaḥīḥ Muslim',auth:'Imām Muslim (206–261 H)',desc:'Second recueil canonique. Organisation supérieure, regroupe les variantes d\'un même hadith.',cnt:'~7 500 hadiths'},{r:'٣',ar:'سُنَنُ أَبِي دَاوُد',name:'Sunan Abī Dāwūd',auth:'Imām Abū Dāwūd (202–275 H)',desc:'Référence pour les hadiths juridiques (fiqh). Classé par chapitres de droit islamique.',cnt:'~5 274 hadiths'},{r:'٤',ar:'جَامِعُ التِّرْمِذِيِّ',name:'Jāmiʿ al-Tirmidhī',auth:'Imām al-Tirmidhī (209–279 H)',desc:'Précieux pour ses commentaires sur les divergences entre écoles et sa notation d\'authenticité.',cnt:'~3 956 hadiths'},{r:'٥',ar:'سُنَنُ النَّسَائِيِّ',name:'Sunan al-Nasāʾī',auth:'Imām al-Nasāʾī (215–303 H)',desc:'Grande rigueur dans la critique des transmetteurs, presque au niveau de Muslim.',cnt:'~5 748 hadiths'},{r:'٦',ar:'سُنَنُ ابْنِ مَاجَهْ',name:'Sunan Ibn Mājah',auth:'Imām Ibn Mājah (209–273 H)',desc:'Contient des hadiths supplémentaires absents des cinq autres. À utiliser avec discernement.',cnt:'~4 341 hadiths'},{r:'✦',ar:'مُوَطَّأُ الإِمَامِ مَالِكٍ',name:'Muwaṭṭaʾ de l\'Imam Mālik',auth:'Imām Mālik (93–179 H)',desc:"Al-Shāfiʿī : « Aucun livre plus authentique après le Coran. » Le plus ancien recueil organisé.",cnt:'~1 720 hadiths'},{r:'✦',ar:'مُسْنَدُ الإِمَامِ أَحْمَدَ',name:'Musnad de l\'Imam Aḥmad',auth:'Imām Aḥmad ibn Ḥanbal (164–241 H)',desc:'Le plus grand musnad islamique, classé par compagnon. Symbole de la fermeté sur la Sunnah.',cnt:'27 000+ hadiths'}];
+
+let hadiths=JSON.parse(localStorage.getItem('dini_hadiths')||'[]');
+let sourates=JSON.parse(localStorage.getItem('dini_sourates')||'{}');
+let sessions=JSON.parse(localStorage.getItem('dini_sessions')||'[]');
+let hFilter='all', cFilter='all', hEditId=null, modalN=null;
+
+function save(){
+  localStorage.setItem('dini_hadiths',JSON.stringify(hadiths));
+  localStorage.setItem('dini_sourates',JSON.stringify(sourates));
+  localStorage.setItem('dini_sessions',JSON.stringify(sessions));
+  updateHome();
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ===== TAB NAV ===== */
+function goTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('page-'+tab).classList.add('active');
+  document.getElementById('app-main').scrollTop=0;
+  if(tab==='coran'){renderCoranStats();renderSourates();renderSessions();}
+  if(tab==='hadiths'){updateHFilters();renderHadiths();}
+  if(tab==='sources')renderSources();
+  if(tab==='home')updateHome();
+}
+
+/* ===== SHEETS ===== */
+function openSheet(id){document.getElementById(id).classList.add('open');}
+function closeSheet(id){document.getElementById(id).classList.remove('open');}
+
+/* ===== HOME ===== */
+function updateHome(){
+  const learned=Object.values(sourates).filter(s=>s.status==='learned').length;
+  const prog=Object.values(sourates).filter(s=>s.status==='inprogress').length;
+  const pct=Math.round(learned/114*100);
+  document.getElementById('h-cnt-sourates').textContent=learned;
+  document.getElementById('h-cnt-hadiths').textContent=hadiths.length;
+  document.getElementById('h-cnt-prog').textContent=prog;
+  document.getElementById('h-cnt-sess').textContent=sessions.length;
+  document.getElementById('h-prog-pct').textContent=pct+'%';
+  document.getElementById('h-prog-bar').style.width=pct+'%';
+  document.getElementById('h-prog-txt').textContent=learned+' / 114 sourates';
+  const bme=Object.entries(sourates).find(([,v])=>v.bookmark);
+  const bmCard=document.getElementById('h-bm-card');
+  if(bme){
+    const s=SOURATES.find(x=>x.n==bme[0]);
+    if(s){bmCard.style.display='block';document.getElementById('h-bm-ar').textContent=s.ar;document.getElementById('h-bm-name').textContent=s.n+'. '+s.fr;document.getElementById('h-bm-meta').textContent=s.v+' versets · '+s.t;}
+  }else bmCard.style.display='none';
+  const rec=document.getElementById('h-recent');
+  if(!hadiths.length){rec.innerHTML='<div style="font-size:13px;color:var(--text4);padding:8px 0;">Aucun hadith enregistré. Commencez votre carnet !</div>';return;}
+  rec.innerHTML=hadiths.slice(-3).reverse().map(h=>`
+    <div class="card-sm" style="margin-bottom:8px;">
+      ${h.ar?`<div class="ar-text" style="font-size:15px;margin-bottom:5px;">${h.ar.substring(0,50)}${h.ar.length>50?'…':''}</div>`:''}
+      ${h.fr?`<div style="font-size:12px;color:var(--text2);font-style:italic;line-height:1.6;">${h.fr.substring(0,80)}${h.fr.length>80?'…':''}</div>`:''}
+      <div style="font-size:11px;color:var(--text4);margin-top:5px;">${h.source||''}${h.ref?' · '+h.ref:''}</div>
+    </div>`).join('');
+}
+
+/* ===== CORAN ===== */
+function renderCoranStats(){
+  const learned=Object.values(sourates).filter(s=>s.status==='learned').length;
+  const prog=Object.values(sourates).filter(s=>s.status==='inprogress').length;
+  const rest=114-learned-prog;
+  const pct=Math.round(learned/114*100);
+  document.getElementById('c-bar').style.width=pct+'%';
+  document.getElementById('c-pct').textContent=pct+'%';
+  document.getElementById('c-done').textContent=learned+' apprises';
+  document.getElementById('c-prog').textContent=prog+' en cours';
+  document.getElementById('c-rest').textContent=rest+' restantes';
+}
+
+function setCFilter(f){
+  cFilter=f;
+  document.querySelectorAll('[data-cf]').forEach(c=>c.classList.toggle('active',c.dataset.cf===f));
+  renderSourates();
+}
+
+function renderSourates(){
+  const search=document.getElementById('c-search').value.toLowerCase();
+  const list=document.getElementById('sourate-list');
+  let filtered=SOURATES.filter(s=>{
+    const ms=!search||s.fr.toLowerCase().includes(search)||s.ar.includes(search)||String(s.n).includes(search);
+    const sd=sourates[s.n]||{};
+    if(cFilter==='learned') return ms&&sd.status==='learned';
+    if(cFilter==='inprogress') return ms&&sd.status==='inprogress';
+    if(cFilter==='bookmark') return ms&&sd.bookmark;
+    return ms;
+  });
+  if(!filtered.length){list.innerHTML=`<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><p>Aucune sourate trouvée.</p></div>`;return;}
+  list.innerHTML=filtered.map(s=>{
+    const sd=sourates[s.n]||{};
+    const cls=sd.status==='learned'?'status-learned':sd.status==='inprogress'?'status-prog':sd.bookmark?'status-bm':'';
+    return `<div class="list-item ${cls}" style="display:flex;align-items:center;gap:10px;">
+      <div style="width:34px;height:34px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--text3);flex-shrink:0;">${s.n}</div>
+      <div style="flex:1;min-width:0;cursor:pointer;" onclick="openSourateModal(${s.n})">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <div style="font-size:13px;font-weight:600;color:var(--text);">${s.fr}</div>
+          <div class="ar-text" style="font-size:16px;">${s.ar}</div>
+        </div>
+        <div style="font-size:11px;color:var(--text4);margin-top:2px;">${s.v} versets · ${s.t}${sd.note?' · 📝':''}</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;">
+        <button class="btn-icon-sq ${sd.status==='learned'?'active-check':''}" onclick="quickStatus(${s.n},'learned')" aria-label="Apprise">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+        </button>
+        <button class="btn-icon-sq ${sd.status==='inprogress'?'active-prog':''}" onclick="quickStatus(${s.n},'inprogress')" aria-label="En cours">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.5-8.33"/></svg>
+        </button>
+        <button class="btn-icon-sq ${sd.bookmark?'active-bm':''}" onclick="quickBM(${s.n})" aria-label="Marque-page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+  renderCoranStats();
+}
+
+function quickStatus(n,status){
+  if(!sourates[n])sourates[n]={};
+  sourates[n].status=sourates[n].status===status?null:status;
+  save();renderSourates();
+  toast(sourates[n].status===status?'✓ Statut mis à jour':'Statut retiré');
+}
+
+function quickBM(n){
+  Object.values(sourates).forEach(v=>v.bookmark=false);
+  if(!sourates[n])sourates[n]={};
+  sourates[n].bookmark=true;
+  save();renderSourates();
+  toast('🔖 Marque-page posé');
+}
+
+function openSourateModal(n){
+  const s=SOURATES.find(x=>x.n===n);if(!s)return;
+  modalN=n;const sd=sourates[n]||{};
+  document.getElementById('ms-ar').textContent=s.ar;
+  document.getElementById('ms-name').textContent=s.n+'. '+s.fr;
+  document.getElementById('ms-meta').textContent=s.v+' versets · '+s.t;
+  document.getElementById('ms-note').value=sd.note||'';
+  const bc=document.getElementById('ms-btn-check');
+  const bp=document.getElementById('ms-btn-prog');
+  const bb=document.getElementById('ms-btn-bm');
+  bc.className='modal-action-btn'+(sd.status==='learned'?' a-check':'');
+  bp.className='modal-action-btn'+(sd.status==='inprogress'?' a-prog':'');
+  bb.className='modal-action-btn'+(sd.bookmark?' a-bm':'');
+  openSheet('modal-sourate');
+}
+
+function modalSourateAction(action){
+  const n=modalN;if(!sourates[n])sourates[n]={};
+  if(action==='learned'){sourates[n].status=sourates[n].status==='learned'?null:'learned';}
+  else if(action==='inprogress'){sourates[n].status=sourates[n].status==='inprogress'?null:'inprogress';}
+  else if(action==='bookmark'){Object.values(sourates).forEach(v=>v.bookmark=false);sourates[n].bookmark=true;}
+  save();openSourateModal(n);renderSourates();
+  toast('✓ Enregistré');
+}
+
+function saveSourateNote(){
+  const n=modalN;if(!sourates[n])sourates[n]={};
+  sourates[n].note=document.getElementById('ms-note').value.trim();
+  save();closeSheet('modal-sourate');renderSourates();
+  toast('📝 Note enregistrée');
+}
+
+/* ===== SESSIONS ===== */
+function openSessionSheet(){
+  document.getElementById('sess-date').value=new Date().toISOString().slice(0,10);
+  const sel=document.getElementById('sess-sourate');
+  sel.innerHTML=SOURATES.map(s=>`<option value="${s.n}">${s.n}. ${s.fr} — ${s.ar}</option>`).join('');
+  document.getElementById('sess-versets').value='';
+  document.getElementById('sess-note').value='';
+  openSheet('modal-session');
+}
+
+function saveSession(){
+  const sn=document.getElementById('sess-sourate').value;
+  const s=SOURATES.find(x=>x.n==sn);if(!s)return;
+  sessions.unshift({id:Date.now(),date:document.getElementById('sess-date').value,sourate:s.fr,sourate_ar:s.ar,versets:document.getElementById('sess-versets').value.trim(),note:document.getElementById('sess-note').value.trim()});
+  save();closeSheet('modal-session');renderSessions();
+  toast('✓ Session enregistrée');
+}
+
+function renderSessions(){
+  const el=document.getElementById('sessions-list');
+  if(!sessions.length){el.innerHTML='<div style="font-size:12px;color:var(--text4);text-align:center;padding:12px;">Aucune session enregistrée.</div>';return;}
+  el.innerHTML=sessions.slice(0,5).map(s=>`
+    <div class="session-item">
+      <div class="session-top">
+        <div>
+          <div class="session-sourate">${s.sourate} <span class="ar-text" style="font-size:16px;">${s.sourate_ar}</span></div>
+          ${s.versets?`<div style="font-size:11px;color:var(--text3);margin-top:2px;">Versets : ${s.versets}</div>`:''}
+        </div>
+        <div class="session-date">${s.date||''}</div>
+      </div>
+      ${s.note?`<div class="session-note">${s.note}</div>`:''}
+    </div>`).join('');
+}
+
+/* ===== HADITHS ===== */
+function openHadithSheet(id=null){
+  hEditId=id;
+  document.getElementById('mh-title').textContent=id?'Modifier le hadith':'Nouveau hadith';
+  if(id){
+    const h=hadiths.find(x=>x.id===id);if(!h)return;
+    document.getElementById('mh-ar').value=h.ar||'';document.getElementById('mh-fr').value=h.fr||'';
+    document.getElementById('mh-source').value=h.source||'';document.getElementById('mh-ref').value=h.ref||'';
+    document.getElementById('mh-theme').value=h.theme||'';document.getElementById('mh-narrator').value=h.narrator||'';
+  }else{
+    ['mh-ar','mh-fr','mh-ref','mh-narrator'].forEach(id=>document.getElementById(id).value='');
+    ['mh-source','mh-theme'].forEach(id=>document.getElementById(id).value='');
+  }
+  openSheet('modal-hadith');
+}
+
+function saveHadith(){
+  const ar=document.getElementById('mh-ar').value.trim();
+  const fr=document.getElementById('mh-fr').value.trim();
+  if(!ar&&!fr)return;
+  const obj={id:hEditId||Date.now(),ar,fr,source:document.getElementById('mh-source').value,ref:document.getElementById('mh-ref').value.trim(),theme:document.getElementById('mh-theme').value,narrator:document.getElementById('mh-narrator').value.trim()};
+  if(hEditId){const i=hadiths.findIndex(h=>h.id===hEditId);if(i>-1)hadiths[i]=obj;}
+  else hadiths.push(obj);
+  save();closeSheet('modal-hadith');updateHFilters();renderHadiths();
+  toast('✓ Hadith enregistré');
+}
+
+function deleteHadith(id){
+  if(!confirm('Supprimer ce hadith ?'))return;
+  hadiths=hadiths.filter(h=>h.id!==id);
+  save();updateHFilters();renderHadiths();
+  toast('Hadith supprimé');
+}
+
+function setHFilter(f){
+  hFilter=f;
+  document.querySelectorAll('[data-hf]').forEach(c=>c.classList.toggle('active',c.dataset.hf===f));
+  renderHadiths();
+}
+
+function updateHFilters(){
+  const row=document.getElementById('h-chips');
+  const srcs=[...new Set(hadiths.map(h=>h.source).filter(Boolean))];
+  row.innerHTML='<div class="chip active" data-hf="all" onclick="setHFilter(\'all\')">Tous</div>'+srcs.map(s=>`<div class="chip" data-hf="${s}" onclick="setHFilter('${s}')">${s.split(' ')[0]}…</div>`).join('');
+  if(hFilter!=='all')document.querySelectorAll('[data-hf]').forEach(c=>c.classList.toggle('active',c.dataset.hf===hFilter));
+}
+
+function renderHadiths(){
+  const list=document.getElementById('hadith-list');
+  const search=document.getElementById('h-search').value.toLowerCase();
+  let f=hadiths.filter(h=>{
+    const ms=!search||(h.ar||'').toLowerCase().includes(search)||(h.fr||'').toLowerCase().includes(search)||(h.source||'').toLowerCase().includes(search);
+    const mf=hFilter==='all'||h.source===hFilter;
+    return ms&&mf;
+  });
+  if(!f.length){
+    list.innerHTML=`<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><p>${hadiths.length?'Aucun résultat.':'Appuyez sur « Ajouter un hadith »\npour commencer votre carnet.'}</p></div>`;
+    return;
+  }
+  list.innerHTML=f.slice().reverse().map(h=>`
+    <div class="hadith-card">
+      ${h.theme?`<div style="margin-bottom:10px;"><span class="tag tag-green">${h.theme}</span></div>`:''}
+      ${h.ar?`<div class="hadith-ar">${h.ar}</div>`:''}
+      ${h.fr?`<div class="hadith-fr">${h.fr}</div>`:''}
+      <div class="hadith-meta">
+        <div>
+          <div class="hadith-ref">${h.source||''}${h.ref?' · '+h.ref:''}</div>
+          ${h.narrator?`<div class="hadith-narrator">${h.narrator}</div>`:''}
+        </div>
+        <div style="display:flex;gap:7px;">
+          <button class="btn-icon-sq" onclick="openHadithSheet(${h.id})" aria-label="Modifier">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="btn-icon-sq" style="color:var(--danger);" onclick="deleteHadith(${h.id})" aria-label="Supprimer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ===== SOURCES ===== */
+function renderSources(){
+  document.getElementById('sources-list').innerHTML=SOURCES.map(s=>`
+    <div class="source-card">
+      <div class="source-num">${s.r}</div>
+      <div>
+        <div class="source-name-ar">${s.ar}</div>
+        <div class="source-name">${s.name}</div>
+        <div class="source-author">${s.auth}</div>
+        <div class="source-desc">${s.desc}</div>
+        <span class="tag tag-gray" style="margin-top:8px;">${s.cnt}</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ===== INIT ===== */
+updateHome();
+renderSources();
+</script>
+</body>
+</html>
